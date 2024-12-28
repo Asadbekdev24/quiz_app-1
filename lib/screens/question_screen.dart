@@ -1,15 +1,15 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:quiz_app/data/data_model.dart';
 import 'package:quiz_app/data/database.dart';
+import 'package:quiz_app/screens/endup_page.dart';
 import 'package:quiz_app/utils/app_colors.dart';
+import 'package:quiz_app/widgets/answer_button.dart';
 import 'package:quiz_app/widgets/custom_button.dart';
 
 class QuestionScreen extends StatefulWidget {
   final String name;
-  static int currentQuestion = 0;
 
   const QuestionScreen({super.key, required this.name});
 
@@ -20,16 +20,37 @@ class QuestionScreen extends StatefulWidget {
 class _QuestionScreenState extends State<QuestionScreen> {
   String _selectedOption = "";
   int correctAnswers = 0;
+  int currentQuestion = 0;
 
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> questionData = jsonDecode(questionsBank);
     final List<dynamic> questionsList = questionData["questions"];
+
     final List<Question> questions =
         questionsList.map((e) => Question.fromJson(e)).toList();
-    log(questions.toString());
-    // Check if there are any questions
-    if (questions.isEmpty || questions.isEmpty) {
+
+    bool checkAnswer(Question question, String id) {
+      for (var answer in [
+        question.answer1,
+        question.answer2,
+        question.answer3,
+        question.answer4
+      ]) {
+        if (answer?.id == id && answer!.isTrue!) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    void valueChanger(value) {
+      setState(() {
+        _selectedOption = value;
+      });
+    }
+
+    if (questions.isEmpty) {
       return Scaffold(
         body: Center(
           child: Text('No questions available'),
@@ -37,95 +58,99 @@ class _QuestionScreenState extends State<QuestionScreen> {
       );
     }
 
-    Question question =
-        questions[QuestionScreen.currentQuestion]; // Access the first question
+    Question question = questions[currentQuestion];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz'),
+        title: Text(
+          "${currentQuestion + 1}/${questions.length + 1}",
+          style: TextStyle(fontSize: 16),
+        ),
+        backgroundColor: AppColors.greyBackground,
       ),
+      backgroundColor: AppColors.greyBackground,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child:
-                    Text(question.context ?? 'No question context available'),
-              ),
+              color: Colors.white,
+              elevation: 5.0,
+              shadowColor: Colors.grey[400],
+              child: SizedBox(
+                  height: 220,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        question.context ?? 'No question context available',
+                        style: TextStyle(fontSize: 18),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )),
             ),
             SizedBox(height: 20),
-            // Display each answer as a RadioListTile
-            RadioListTile<String>(
-              title: Text(question.answer1?.text ?? 'No answer available'),
-              value: question.answer1?.isTrue.toString() ?? '',
-              groupValue: _selectedOption,
-              onChanged: (value) {
-                setState(() {
-                  _selectedOption = value!;
-                });
-              },
+            AnswerButton(
+                selectedOption: _selectedOption,
+                answerText: question.answer1?.text.toString() ?? '',
+                value: question.answer1?.id.toString() ?? '',
+                onChanged: valueChanger),
+            SizedBox(
+              height: 24,
             ),
-            RadioListTile<String>(
-              title: Text(question.answer2?.text ?? 'No answer available'),
-              value: question.answer2?.isTrue.toString() ?? '',
-              groupValue: _selectedOption,
-              onChanged: (value) {
-                setState(() {
-                  _selectedOption = value!;
-                });
-              },
+            AnswerButton(
+                selectedOption: _selectedOption,
+                answerText: question.answer2?.text.toString() ?? '',
+                value: question.answer2?.id.toString() ?? '',
+                onChanged: valueChanger),
+            SizedBox(
+              height: 24,
             ),
-            RadioListTile<String>(
-              title: Text(question.answer3?.text ?? 'No answer available'),
-              value: question.answer3?.isTrue.toString() ?? '',
-              groupValue: _selectedOption,
-              onChanged: (value) {
-                setState(() {
-                  _selectedOption = value!;
-                });
-              },
+            AnswerButton(
+                selectedOption: _selectedOption,
+                answerText: question.answer3?.text.toString() ?? '',
+                value: question.answer3?.id.toString() ?? '',
+                onChanged: valueChanger),
+            SizedBox(
+              height: 24,
             ),
-            RadioListTile<String>(
-              title: Text(question.answer4?.text ?? 'No answer available'),
-              value: question.answer4?.isTrue.toString() ?? '',
-              groupValue: _selectedOption,
-              onChanged: (value) {
-                setState(() {
-                  _selectedOption = value!;
-                });
-              },
-            ),
+            AnswerButton(
+                selectedOption: _selectedOption,
+                answerText: question.answer4?.text.toString() ?? '',
+                value: question.answer4?.id.toString() ?? '',
+                onChanged: valueChanger),
             Spacer(),
             CustomButton(
               buttonText: "Next",
               color: AppColors.mainColor,
               onPressed: () async {
-                if (QuestionScreen.currentQuestion + 1 >= questions.length) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          "Savollar tugadi, To'g'ri javoblar soni:  $correctAnswers")));
-                } else {
-                  await Future.delayed(
-                    Duration(seconds: 1),
-                    () {
-                      setState(() {
-                        question =
-                            questions[QuestionScreen.currentQuestion + 1];
-                      });
-                    },
-                  );
-                }
-                if (_selectedOption == "true") {
+                if (checkAnswer(question, _selectedOption)) {
                   setState(() {
                     correctAnswers++;
                   });
                 }
-                log("topdingiz: $correctAnswers");
-                log(_selectedOption);
-                log(QuestionScreen.currentQuestion.toString());
+                if (currentQuestion + 1 >= questions.length) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EndPage(
+                            name: widget.name,
+                            trueAnswersCount: correctAnswers)),
+                  );
+                } else {
+                  await Future.delayed(
+                    Duration(seconds: 0),
+                    () {
+                      setState(() {
+                        currentQuestion++;
+                      });
+
+                      question = questions[currentQuestion];
+                    },
+                  );
+                }
               },
             ),
           ],

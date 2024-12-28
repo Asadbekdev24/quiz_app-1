@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app/screens/question_screen.dart';
 import 'package:quiz_app/screens/startup_page.dart';
 
 void main() {
@@ -12,14 +11,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: QuestionScreen(
-        name: "Sunnat",
-      ),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          textTheme: TextTheme(
+            bodyLarge: TextStyle(fontFamily: "Baloo 2"),
+            bodyMedium: TextStyle(fontFamily: "Baloo 2"),
+            bodySmall: TextStyle(fontFamily: "Baloo 2"),
+          ),
+          useMaterial3: true,
+        ),
+        home: StartupPage());
   }
 }

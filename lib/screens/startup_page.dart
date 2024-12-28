@@ -23,7 +23,7 @@ class _StartupPageState extends State<StartupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.secondaryColor,
+      backgroundColor: AppColors.startupBackground,
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
@@ -35,17 +35,29 @@ class _StartupPageState extends State<StartupPage> {
           children: [
             Center(
               child: Container(
+                width: 160,
+                height: 160,
                 margin: EdgeInsets.symmetric(vertical: 120),
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white,
                 ),
-                child: Text(
-                  "QUIZ\n    Khelo",
-                  style: TextStyle(
-                    color: AppColors.mainColor,
-                    fontWeight: FontWeight.bold,
+                child: Center(
+                  child: Text.rich(
+                    TextSpan(children: [
+                      TextSpan(
+                          text: "QUIZ\n",
+                          style: TextStyle(
+                              fontSize: 40,
+                              color: AppColors.mainColor,
+                              height: 0.4)),
+                      TextSpan(
+                        text: "          Khelo",
+                        style: TextStyle(
+                            fontSize: 20, color: AppColors.yellowColor),
+                      )
+                    ]),
                   ),
                 ),
               ),
