@@ -22,13 +22,13 @@ class EndPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Congratulations, $name!',
+                'Testni ishlaganingiz uchun rahmat, $name!',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 20),
               Text(
-                'You got $trueAnswersCount correct answers!',
+                "Siz 6 ta savoldan $trueAnswersCount ga to'g'ri javob berdingiz",
                 style: TextStyle(fontSize: 20),
                 textAlign: TextAlign.center,
               ),

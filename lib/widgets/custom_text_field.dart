@@ -3,6 +3,7 @@ import 'package:quiz_app/utils/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
+
   final String hintText;
   const CustomTextField(
       {super.key, required this.controller, required this.hintText});
@@ -10,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      style: TextStyle(color: Colors.white),
       cursorColor: AppColors.mainColor,
       controller: controller,
       decoration: InputDecoration(

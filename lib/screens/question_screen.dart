@@ -62,67 +62,79 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
-          "${currentQuestion + 1}/${questions.length + 1}",
+          "${currentQuestion + 1}/${questions.length}",
           style: TextStyle(fontSize: 16),
         ),
         backgroundColor: AppColors.greyBackground,
       ),
       backgroundColor: AppColors.greyBackground,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Card(
-              color: Colors.white,
-              elevation: 5.0,
-              shadowColor: Colors.grey[400],
-              child: SizedBox(
-                  height: 220,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        question.context ?? 'No question context available',
-                        style: TextStyle(fontSize: 18),
-                        textAlign: TextAlign.center,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Card(
+                      color: Colors.white,
+                      elevation: 5.0,
+                      shadowColor: Colors.grey[400],
+                      child: SizedBox(
+                        height: 220,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              question.context ??
+                                  'No question context available',
+                              style: TextStyle(fontSize: 18),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  )),
+                    SizedBox(height: 20),
+                    AnswerButton(
+                      selectedOption: _selectedOption,
+                      answerText: question.answer1?.text.toString() ?? '',
+                      value: question.answer1?.id.toString() ?? '',
+                      onChanged: valueChanger,
+                    ),
+                    SizedBox(height: 24),
+                    AnswerButton(
+                      selectedOption: _selectedOption,
+                      answerText: question.answer2?.text.toString() ?? '',
+                      value: question.answer2?.id.toString() ?? '',
+                      onChanged: valueChanger,
+                    ),
+                    SizedBox(height: 24),
+                    AnswerButton(
+                      selectedOption: _selectedOption,
+                      answerText: question.answer3?.text.toString() ?? '',
+                      value: question.answer3?.id.toString() ?? '',
+                      onChanged: valueChanger,
+                    ),
+                    SizedBox(height: 24),
+                    AnswerButton(
+                      selectedOption: _selectedOption,
+                      answerText: question.answer4?.text.toString() ?? '',
+                      value: question.answer4?.id.toString() ?? '',
+                      onChanged: valueChanger,
+                    ),
+                  ],
+                ),
+              ),
             ),
-            SizedBox(height: 20),
-            AnswerButton(
-                selectedOption: _selectedOption,
-                answerText: question.answer1?.text.toString() ?? '',
-                value: question.answer1?.id.toString() ?? '',
-                onChanged: valueChanger),
-            SizedBox(
-              height: 24,
-            ),
-            AnswerButton(
-                selectedOption: _selectedOption,
-                answerText: question.answer2?.text.toString() ?? '',
-                value: question.answer2?.id.toString() ?? '',
-                onChanged: valueChanger),
-            SizedBox(
-              height: 24,
-            ),
-            AnswerButton(
-                selectedOption: _selectedOption,
-                answerText: question.answer3?.text.toString() ?? '',
-                value: question.answer3?.id.toString() ?? '',
-                onChanged: valueChanger),
-            SizedBox(
-              height: 24,
-            ),
-            AnswerButton(
-                selectedOption: _selectedOption,
-                answerText: question.answer4?.text.toString() ?? '',
-                value: question.answer4?.id.toString() ?? '',
-                onChanged: valueChanger),
-            Spacer(),
-            CustomButton(
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: CustomButton(
               buttonText: "Next",
               color: AppColors.mainColor,
               onPressed: () async {
@@ -153,8 +165,8 @@ class _QuestionScreenState extends State<QuestionScreen> {
                 }
               },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

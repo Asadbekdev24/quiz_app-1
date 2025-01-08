@@ -23,7 +23,7 @@ class _StartupPageState extends State<StartupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.startupBackground,
+      backgroundColor: AppColors.startupBackground.withValues(alpha: 0.7),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
@@ -35,6 +35,7 @@ class _StartupPageState extends State<StartupPage> {
           children: [
             Center(
               child: Container(
+                alignment: Alignment.bottomCenter,
                 width: 160,
                 height: 160,
                 margin: EdgeInsets.symmetric(vertical: 120),
@@ -72,6 +73,7 @@ class _StartupPageState extends State<StartupPage> {
             CustomTextField(
               controller: nameController,
               hintText: "Sunnat Amirov",
+              
             ),
             Spacer(),
             CustomButton(

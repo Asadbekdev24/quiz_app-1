@@ -29,6 +29,7 @@ class AnswerButton extends StatelessWidget {
             ),
             color: isSelected ? AppColors.secondaryColor : Colors.white),
         child: RadioListTile<String>(
+          controlAffinity: ListTileControlAffinity.trailing,
           title: Text(
             answerText ?? "",
             style: TextStyle(
